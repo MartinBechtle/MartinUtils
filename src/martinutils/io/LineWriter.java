@@ -195,7 +195,7 @@ public class LineWriter
 	{
 		col = col != null ? wrapAndEscape(col) : "";
 		
-		if (col.contains(colSeparator))
+		if (col.contains(colSeparator) && wrap == false)
 		{
 			String output = col.replace(colSeparator, "###" + colSeparator + "###");
 			throw new LineFormatException("Content contains unescaped column separator:\n" + output);

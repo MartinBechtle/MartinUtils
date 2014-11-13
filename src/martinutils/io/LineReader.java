@@ -22,19 +22,20 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class LineReader implements Iterable<String[]>
 {
-	private String fileName;
-	private List<String> lines;
-	private List<String[]> columnList;
-	private Set<Integer> constraints = null;
-	private String colSeparatorRegex = "\t";
+	private String 			fileName;
+	private List<String> 	lines;
+	private List<String[]> 	columnList;
+	private Set<Integer> 	constraints = null;
+	private String 			colSeparatorRegex = "\t";
 	
 	public LineReader(File inputFile) throws IOException
 	{
 		if (inputFile == null)
 			throw new IllegalArgumentException("inputFile cannot be null");
 		
-		lines = FileUtil.readUTF8Lines(inputFile);
-		fileName = inputFile.getName();
+		lines 		= FileUtil.readUTF8Lines(inputFile);
+		fileName 	= inputFile.getName();
+		columnList 	= new ArrayList<>();
 	}
 	
 	public LineReader setColSeparator(String regex)
@@ -50,8 +51,8 @@ public class LineReader implements Iterable<String[]>
 		if (StringUtils.isEmpty(charset))
 			throw new IllegalArgumentException("charset cannot be empty");
 		
-		lines = FileUtils.readLines(inputFile, Charset.forName(charset));
-		fileName = inputFile.getName();
+		lines 		= FileUtils.readLines(inputFile, Charset.forName(charset));
+		fileName 	= inputFile.getName();
 	}
 	
 	public LineReader setExpectedCols(int minCols, int maxCols) throws LineFormatException
