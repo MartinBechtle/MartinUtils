@@ -10,7 +10,7 @@ import martinutils.io.FileUtil;
 public class StringUtil
 {
 	/**
-	 * Restituisce tue se la stringa � null o vuota
+	 * Restituisce tue se la stringa è null o vuota
 	 * @param str
 	 * @return
 	 */
