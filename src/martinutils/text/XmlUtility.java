@@ -21,6 +21,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -144,7 +145,7 @@ public class XmlUtility
 	 */
 	public static Node getFirstChildByName(Node node, String nodeName, boolean caseSensitive)
 	{
-		if (StringUtil.isEmptyOrNull(nodeName))
+		if (StringUtils.isEmpty(nodeName))
 			return null;
 		if (node == null)
 			return null;
