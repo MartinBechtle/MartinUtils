@@ -112,12 +112,32 @@ public class XmlUtility
 		
 		return sb.toString();
 	}
+	
+	/**
+	 * Restituisce true se un dato nodo ha l'attributo col nome specificato
+	 */
+	public static boolean hasXmlAttribute(Node node, String attrName)
+	{
+		if (StringUtils.isEmpty(attrName))
+			throw new IllegalArgumentException("attrName cannot be null");
+		if (node == null)
+			throw new IllegalArgumentException("node cannot be null");
+		
+		String attrValue = getXmlAttributeValue(node, attrName);
+		if (StringUtils.isEmpty(attrValue))
+			return false;
+		
+		return true;
+	}
 
 	/**
 	 * Restituisce il valore di un attributo XML, oppure null se non trovato
 	 */
 	public static String getXmlAttributeValue(NamedNodeMap attrs, String attrName)
 	{
+		if (StringUtils.isEmpty(attrName))
+			throw new IllegalArgumentException("attrName cannot be null");
+		
 		if (attrs == null)
 			return null;
 		
@@ -134,7 +154,9 @@ public class XmlUtility
 	public static String getXmlAttributeValue(Node node, String attrName)
 	{
 		if (node == null)
-			return null;
+			throw new IllegalArgumentException("node cannot be null");
+		if (StringUtils.isEmpty(attrName))
+			throw new IllegalArgumentException("attrName cannot be null");
 		
 		NamedNodeMap attrs = node.getAttributes();
 		String result = getXmlAttributeValue(attrs, attrName);
@@ -151,9 +173,9 @@ public class XmlUtility
 	public static Node getFirstChildByName(Node node, String nodeName, boolean caseSensitive)
 	{
 		if (StringUtils.isEmpty(nodeName))
-			return null;
+			throw new IllegalArgumentException("nodeName cannot be empty");
 		if (node == null)
-			return null;
+			throw new IllegalArgumentException("node cannot be null");
 		
 		NodeList children = node.getChildNodes();
 		int len = children.getLength();
@@ -182,9 +204,9 @@ public class XmlUtility
 	public static List<Node> getChildrenByName(Node node, String nodeName, boolean caseSensitive)
 	{
 		if (StringUtils.isEmpty(nodeName))
-			return null;
+			throw new IllegalArgumentException("nodeName cannot be empty");
 		if (node == null)
-			return null;
+			throw new IllegalArgumentException("node cannot be null");
 		
 		List<Node> result = new ArrayList<>();
 		NodeList children = node.getChildNodes();
