@@ -2,13 +2,14 @@ package martinutils.text;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
 
 public class StringUtil
 {
 	/**
-	 * Parse a fucking int withouth having to fucking catch the fucking numberformat exception
+	 * Parse an int withouth having to catch the numberformat exception
 	 * @param str
 	 * @return null if is not valid integer
 	 */
@@ -16,6 +17,21 @@ public class StringUtil
 	{
 		try {
 			return Integer.parseInt(str);
+		}
+		catch (NumberFormatException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Parse a float withouth having to catch the numberformat exception
+	 * @param str a float with a dot as decimal separator
+	 * @return null if is not valid float
+	 */
+	public static Float tryParseFloat(String str)
+	{
+		try {
+			return Float.parseFloat(str);
 		}
 		catch (NumberFormatException e) {
 			return null;
@@ -71,6 +87,7 @@ public class StringUtil
 		
 		return pattern.matcher(str).find();
 	}
+	
 	/**
 	 * Get the first substring in the string matching a regex
 	 * @param regex the regular expression, case sensitive
@@ -129,7 +146,43 @@ public class StringUtil
 	}
 	
 	/**
-	 * Replace all occurrencies of a string in a stringbuilder
+	 * Replace the first occurrence of a given string in a stringbuilder starting from a specific index
+	 * @param sb the StringBuilder to work with
+	 * @param match
+	 * @param replacement
+	 * @param startIndex
+	 * @return the index of the found match, or -1 if not found
+	 */
+	public static int replaceFirst(StringBuilder sb, String match, String replacement, int startIndex)
+	{
+		if (sb == null)
+			throw new IllegalArgumentException("sb cannot be null");
+		
+		if (StringUtils.isEmpty(match))
+			throw new IllegalArgumentException("match cannot be empty");
+		
+		if (sb.length() > 0)
+		{
+			if (replacement == null)
+				replacement = "";
+			
+			int start = sb.indexOf(match, startIndex);
+			
+			if (start > -1)
+			{
+				int end = start + match.length();
+				sb.replace(start, end, replacement);
+				return start;
+			}
+		}
+		
+		return -1;
+	}
+	
+	/**
+	 * Replace all occurrencies of a string in a StringBuilder. Please note: performance is lower than replacing on String. Use only if you have
+	 * the specific need of counting how many occurrencies have replaced or if the number of replacements is low.
+	 * 
 	 * @param sb the stringbuilder in which to replace, not null
 	 * @param match the substring to match, not empty
 	 * @param replacement the replacement for the matched substring
@@ -166,5 +219,65 @@ public class StringUtil
 		}
 		
 		return replacements;
+	}
+	
+	/**
+	 * Restituisce true se una parte della stringa matcha il Pattern specificato, contrariamente al metodo Pattern.matches che invece verifica se l'intera stringa matcha
+	 * @param str la stringa da matchare
+	 * @param pattern un pattern regex
+	 * @return
+	 */
+	public static boolean matches(String str, Pattern pattern)
+	{
+		if (pattern == null)
+			throw new IllegalArgumentException("pattern cannot be null");
+		if (str == null)
+			throw new IllegalArgumentException("str cannot be null");
+		
+		return pattern.matcher(str).find();
+	}
+	
+	/**
+	 * Restituisce true se una parte della stringa matcha la regex specificata, contrariamente al metodo String.matches che invece verifica se l'intera stringa matcha
+	 * @param str la stringa da matchare
+	 * @param regex una espressione regolare
+	 * @return
+	 * @throws PatternSyntaxException
+	 */
+	public static boolean matches(String str, String regex) throws PatternSyntaxException
+	{
+		if (str == null)
+			throw new IllegalArgumentException("str cannot be null");
+		if (regex == null)
+			throw new IllegalArgumentException("regex cannot be null");
+		
+		Pattern pattern = Pattern.compile(regex);
+		return pattern.matcher(str).find();
+	}
+	
+	/**
+	 * Returns the substring of str matching p. Empty string if not found.
+	 */
+	/**
+	 * Data una stringa, restituisce la prima sottosequenza che matcha il pattern specificato
+	 * @param str una stringa non nulla
+	 * @param pattern un pattern non nullo
+	 * @return stringa vuota se non matcha alcuna sottosequenza, altrimenti la sottosequenza matchata
+	 */
+	public static String matchesResult(String str, Pattern pattern)
+	{
+		if (str == null)
+			throw new IllegalArgumentException("str cannot be null");
+		if (pattern == null)
+			throw new IllegalArgumentException("pattern cannot be null");
+		
+		if (str.length() > 0)
+		{
+			Matcher matcher = pattern.matcher(str);
+			if (matcher.find())
+				return matcher.group();
+		}
+		
+		return "";
 	}
 }

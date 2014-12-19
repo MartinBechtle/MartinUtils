@@ -23,6 +23,20 @@ public class StringUtilTest
 		assertNull( StringUtil.tryParseInt("") );
 		assertNull( StringUtil.tryParseInt(null) );
 	}
+	
+	@Test
+	public void testTryParseFloat()
+	{
+		assertEquals( new Float(1), StringUtil.tryParseFloat("1.0") );
+		assertEquals( new Float(25.8), StringUtil.tryParseFloat("25.8") );
+		assertEquals( new Float(-2.1), StringUtil.tryParseFloat("-2.1") );
+		assertNull( StringUtil.tryParseInt("300.0 ") );
+		assertNull( StringUtil.tryParseInt("0.21-") );
+		assertNull( StringUtil.tryParseInt("0,22") );
+		assertNull( StringUtil.tryParseInt("abc1") );
+		assertNull( StringUtil.tryParseInt("") );
+		assertNull( StringUtil.tryParseInt(null) );
+	}
 
 	@Test
 	public void testIsNumber()
@@ -117,6 +131,11 @@ public class StringUtilTest
 		assertEquals(false, StringUtil.replaceFirst(sb, "123", null));
 		
 		assertEquals("Hello world!", sb.toString());
+		
+		// Testiamo l'altro replaceFirst, quello dove si specifica l'indice di inizio
+		sb = new StringBuilder("hello hello world 123!");
+		assertEquals(6, StringUtil.replaceFirst(sb, "hello", "hi", 4));
+		assertEquals("hello hi world 123!", sb.toString());
 	}
 
 	@Test
@@ -151,5 +170,65 @@ public class StringUtilTest
 		
 		assertEquals("Hello world!", sb.toString());
 	}
-
+	
+	@Test
+	public void testMatches()
+	{
+		try {
+			StringUtil.matches(null, Pattern.compile("h"));
+			fail("IllegalArgumentException should be thrown");
+		}
+		catch (IllegalArgumentException e) { }
+		
+		try {
+			StringUtil.matches("h", (Pattern)null);
+			fail("IllegalArgumentException should be thrown");
+		}
+		catch (IllegalArgumentException e) { }
+		
+		try {
+			StringUtil.matches(null, "regex");
+			fail("IllegalArgumentException should be thrown");
+		}
+		catch (IllegalArgumentException e) { }
+		
+		try {
+			StringUtil.matches("hello", (String)null);
+			fail("IllegalArgumentException should be thrown");
+		}
+		catch (IllegalArgumentException e) { }
+		
+		
+		assertTrue( StringUtil.matches("hello", Pattern.compile("l+")) );
+		assertTrue( StringUtil.matches("hello", "l+") );
+		
+		assertFalse( StringUtil.matches("", "l+") );
+	}
+	
+	@Test
+	public void testMatchesResult()
+	{
+		try {
+			StringUtil.matchesResult(null, null);
+			fail("IllegalArgumentException should be thrown");
+		}
+		catch (IllegalArgumentException e) { }
+		
+		try {
+			StringUtil.matchesResult("hello", null);
+			fail("IllegalArgumentException should be thrown");
+		}
+		catch (IllegalArgumentException e) { }
+		
+		try {
+			StringUtil.matchesResult(null, Pattern.compile("hi"));
+			fail("IllegalArgumentException should be thrown");
+		}
+		catch (IllegalArgumentException e) { }
+		
+		Pattern p = Pattern.compile("l+");
+		assertEquals( "ll", StringUtil.matchesResult("hello", p) );
+		assertEquals( "", StringUtil.matchesResult("hexxo", p) );
+		assertEquals( "", StringUtil.matchesResult("", p) );
+	}
 }

@@ -81,6 +81,13 @@ public class FileUtil
 		return java.nio.file.Files.newBufferedReader( path, Charset.forName("UTF-8"));
 	}
 	
+	public static String removeBOM(String str)
+	{
+		if (str.length() > 0 && str.charAt(0) == BOM)
+			return str.substring(1);
+		return str;
+	}
+	
 	/**
 	 * UTF-8 byte order mark, which appears at the start of some utf8 files and the java library does not remove
 	 */
