@@ -1,4 +1,4 @@
-package sql;
+package martinutils.sql;
 
 /**
  * Eredita una SqlBooleanClause di tipo AND. Ovvero tutte le condizioni inserite in questa "clause" saranno concatenate tramite AND.

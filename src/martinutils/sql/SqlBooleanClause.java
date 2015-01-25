@@ -1,4 +1,4 @@
-package sql;
+package martinutils.sql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +12,12 @@ import java.util.List;
  * <p>Esempio:</p>
  * <pre>
  * <code>
- * SqlBooleanClause where = new AndSqlBooleanClause(A);
- * SqlBooleanClause secondClause = new OrSqlBooleanClause(B);
- * secondClause.add(C);
- * SqlBooleanClause thirdClause = new OrSqlBooleanClausesecondClause.add(C);
- * SqlBooleanClause innerClause = new AndSqlBooleanClause()
- * innerClause.add(E).add(F);
+ * SqlBooleanClause where = new AndSqlBooleanClause("A");
+ * SqlBooleanClause secondClause = new OrSqlBooleanClause("B");
+ * secondClause.add("C");
+ * SqlBooleanClause thirdClause = new OrSqlBooleanClause("D");
+ * SqlBooleanClause innerClause = new AndSqlBooleanClause();
+ * innerClause.add("E").add("F");
  * thirdClause.add(innerClause);
  * where.add(secondClause).add(thirdClause);
  * where.print();
