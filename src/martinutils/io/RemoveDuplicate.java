@@ -17,7 +17,7 @@ public class RemoveDuplicate
 {
 	public static void main(String[] args) throws IOException
 	{
-		if (args.length == 0)
+		if (args.length < 2)
 			ExecUtil.die("Usage: RemoveDuplicate <input.txt> <output.txt>");
 		
 		List<String> lines = FileUtil.readUTF8Lines( new File(args[0]) );
@@ -28,5 +28,6 @@ public class RemoveDuplicate
 			br.append(str + "\n");
 		
 		br.close();
+		System.out.println("Done");
 	}
 }
