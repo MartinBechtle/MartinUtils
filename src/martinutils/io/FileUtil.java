@@ -4,14 +4,17 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class FileUtil
 {
@@ -228,5 +231,59 @@ public class FileUtil
 			throw new IOException("Dir not accessible: " + dir);
 		if (!dir.isDirectory())
 			throw new IOException("Not a valid directory: " + dir);
+	}
+	
+	/**
+	 * Fa esattamente ciò che fa la funzione File.listFiles, ma restituisce una lista non nulla e filtra solo i file 
+	 * @param directory la directory da cui prendere la lista dei file
+	 * @param un filtro opzionale
+	 * @return
+	 */
+	private static List<File> listFiles(File directory, FilenameFilter filter)
+	{
+		if (directory == null)
+			throw new IllegalArgumentException("directory cannot be null");
+		
+		File[] files = filter != null ? directory.listFiles(filter) : directory.listFiles();
+		if (files == null)
+			files = new File[0];
+		
+		return Arrays.asList(files);
+	}
+	
+	/**
+	 * Fa esattamente ciò che fa la funzione File.listFiles, ma restituisce una lista non nulla
+	 * @param directory la directory da cui prendere la lista dei file
+	 * @return
+	 */
+	public static List<File> listFiles(File directory)
+	{
+		return listFiles(directory, null);
+	}
+	
+	/**
+	 * Fa esattamente ciò che fa la funzione File.listFiles, ma restituisce una lista non nulla e prende solo i file XML
+	 * @param directory la directory da cui prendere la lista dei file
+	 * @return
+	 */
+	public static List<File> listXmlFiles(File directory)
+	{
+		return listFiles(directory, new XmlFileFilter());
+	}
+	
+	/**
+	 * Fa esattamente ciò che fa la funzione File.listFiles, ma restituisce una lista non nulla e prende solo i file con una determinata estensione
+	 * @param directory la directory da cui prendere la lista dei file
+	 * @param ext l'estensione (con o senza punto)
+	 * @return
+	 */
+	public static List<File> listFilesByExt(File directory, String ext)
+	{
+		if (StringUtils.isEmpty(ext))
+			throw new IllegalArgumentException("ext cannot be null");
+		if (ext.startsWith("."))
+			ext = ext.substring(1);
+		
+		return listFiles(directory, new FileNameFilterByExt(ext));
 	}
 }

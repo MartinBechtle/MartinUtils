@@ -1,9 +1,10 @@
-package martinutils.text;
+package martinutils.xml;
 
 import java.util.*;
 import java.util.regex.*;
 
 import martinutils.runtime.TestUtil;
+import martinutils.text.StringUtil;
 
 
 public class XMLEntities

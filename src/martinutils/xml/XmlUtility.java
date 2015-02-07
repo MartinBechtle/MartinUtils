@@ -1,4 +1,4 @@
-package martinutils.text;
+package martinutils.xml;
 
 import java.io.File;
 import java.io.IOException;
@@ -231,6 +231,15 @@ public class XmlUtility
 		if (XmlUtility.xpath == null)
 			XmlUtility.xpath = XPathFactory.newInstance().newXPath();
 		return (NodeList) XmlUtility.xpath.evaluate(query, doc, XPathConstants.NODESET);
+	}
+	
+	public static MartinNodeList doMartinXPathQuery(String query, Document doc) throws XPathExpressionException
+	{
+		if (XmlUtility.xpath == null)
+			XmlUtility.xpath = XPathFactory.newInstance().newXPath();
+		
+		NodeList nodeList = (NodeList) XmlUtility.xpath.evaluate(query, doc, XPathConstants.NODESET);
+		return new MartinNodeList(nodeList);
 	}
 	
 	public static void saveXmlFile(Document doc, File file) throws TransformerException

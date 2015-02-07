@@ -3,6 +3,7 @@ package martinutils.text;
 import java.util.LinkedList;
 
 import martinutils.text.DiffManager.Diff;
+import martinutils.xml.HTMLEntities;
 
 public class Comparison
 {

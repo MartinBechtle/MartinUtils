@@ -1,4 +1,4 @@
-package martinutils.text;
+package martinutils.xml;
 
 import java.util.Hashtable;
 

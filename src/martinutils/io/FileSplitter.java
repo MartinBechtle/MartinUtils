@@ -74,6 +74,7 @@ public class FileSplitter
 		split( new File(filePath) );
 	}
 	
+	@SuppressWarnings("resource")
 	public void split(File file) throws IOException
 	{
 		BufferedReader reader = FileUtil.getUTF8Reader(file);
@@ -96,7 +97,7 @@ public class FileSplitter
 			writer.append("\n");
 			
 			if (bytes > splitSize) {
-				writer = getNewWriter(writer);
+				writer = getNewWriter(writer); // qui ci sarebbe un resource leak se dentro il metodo il vecchio writer non venisse chiuso
 				bytes = 0;
 			}
 		}
