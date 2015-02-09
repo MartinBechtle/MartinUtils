@@ -256,9 +256,6 @@ public class StringUtil
 	}
 	
 	/**
-	 * Returns the substring of str matching p. Empty string if not found.
-	 */
-	/**
 	 * Data una stringa, restituisce la prima sottosequenza che matcha il pattern specificato
 	 * @param str una stringa non nulla
 	 * @param pattern un pattern non nullo
@@ -279,5 +276,35 @@ public class StringUtil
 		}
 		
 		return "";
+	}
+	
+	/**
+	 * Conta il numero di volte che il Matcher matcha
+	 * @param matcher
+	 * @return
+	 */
+	public static int countMatches(Matcher matcher)
+	{
+		if (matcher == null)
+			throw new IllegalArgumentException("matcher cannot be null");
+		
+		int count = 0;
+		while (matcher.find()) count++;
+		return count;
+	}
+	
+	/**
+	 * Conta il numero di volte che un pattern matcha su una stringa
+	 * @param p
+	 * @param str
+	 * @return
+	 */
+	public static int countMatches(Pattern p, String str)
+	{
+		if (p == null || str == null)
+			throw new IllegalArgumentException("args cannot be null");
+		
+		Matcher matcher = p.matcher(str);
+		return countMatches(matcher);
 	}
 }
