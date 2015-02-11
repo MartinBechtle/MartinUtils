@@ -184,7 +184,40 @@ public class FileUtil
 		return fileName.replaceAll("\\.[a-zA-Z]+$", "");
 	}
 	
+	/**
+	 * Restituisce l'estensione di un file, controllandone il nome
+	 * @param file
+	 * @return stringa vuota se non ha alcuna estensione
+	 */
+	public static String getFileExt(File file)
+	{
+		if (file == null)
+			throw new IllegalArgumentException("file cannot be null");
+		
+		return getFileExt(file.getName());
+	}
+	
+	/**
+	 * Restituisce l'estensione di un file
+	 * @param fileName il nome del file
+	 * @return stringa vuota se non ha alcuna estensione
+	 */
+	public static String getFileExt(String fileName)
+	{
+		if (StringUtils.isEmpty(fileName))
+			return "";
 
+		int i = fileName.lastIndexOf(".");
+		int lastIndex = fileName.length() - 1;
+		
+		if (i < 0)
+			return "";
+		if (i >= lastIndex)
+			return "";
+		
+		++i;
+		return fileName.substring(i);
+	}
 	
 	/**
 	 * Check if given file exists, is readable and is not a directory. Throws IOException if conditions are not met
