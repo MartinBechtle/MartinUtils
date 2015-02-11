@@ -21,7 +21,7 @@ public class XmlAsStrUtility
 	 * Istanzia una nuova utility per lavorare su una stringa di XML (tipicamente letta da un file)
 	 * @param xmlStr la stringa su cui lavorare: non nulla e non vuota
 	 */
-	public XmlAsStrUtility(String xmlStr, boolean validate)
+	public XmlAsStrUtility(String xmlStr)
 	{
 		if ( StringUtils.isEmpty(xmlStr))
 			throw new IllegalArgumentException("xmlStr cannot be empty");
