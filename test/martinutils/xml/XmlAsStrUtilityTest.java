@@ -88,7 +88,7 @@ public class XmlAsStrUtilityTest
 		// per ora test semplice semplice, poi si fa più avanzato
 		XmlAsStrUtility util = new XmlAsStrUtility(testXml);
 		
-		String result = util.getElementAsStr("para", "id", "001");
+		String result = util.getElementContentAsStr("para", "id", "001");
 		assertEquals("siamo <para id=\"002\"><bold>fighi</bold> sai?</para>", result);
 	}
 

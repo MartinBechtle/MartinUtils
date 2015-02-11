@@ -83,8 +83,10 @@ public class XmlAsStrUtility
 	 */
 	private String getElementOrContentAsStr(String elementName, String attribute, String value, boolean onlyContent)
 	{
+		if(elementName == null || attribute == null || value == null) throw new IllegalArgumentException();
+		if("".equals(elementName) || "".equals(attribute)) throw new IllegalArgumentException();		
 		
-		Pattern beginningElement = Pattern.compile("<" + Pattern.quote(elementName) + " +[^>]* " + Pattern.quote(attribute) + " ?= ?\"" + Pattern.quote(value) + "\" [^>]*>");
+		Pattern beginningElement = Pattern.compile("<" + Pattern.quote(elementName) + " ?[^>]* +" + Pattern.quote(attribute) + " ?= ?\"" + Pattern.quote(value) + "\" ?[^>]*>");
 		Pattern genericElement = Pattern.compile("</? ?" + Pattern.quote(elementName) + "[^>]*>");
 		
 		Matcher m = beginningElement.matcher(xmlStr);
