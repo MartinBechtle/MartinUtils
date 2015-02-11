@@ -97,30 +97,30 @@ public class XmlAsStrUtility
 		Pattern beginningElement 	= Pattern.compile(beginningElementStr);
 		Pattern genericElement 		= Pattern.compile(genericElementStr);
 		
-		Matcher m = beginningElement.matcher(xmlStr);
+		Matcher beginningMatcher 	= beginningElement.matcher(xmlStr);
 		
 		// cerca l'elemento di apertura voluto se non c'è restituiamo vuoto
-		if (! m.find())
+		if (! beginningMatcher.find())
 			return "";
 		
-		int startIndex = m.start();
-		int endIndex = m.end();
-		int contentStartIndex = endIndex;
-		int contentEndIndex = endIndex;
+		int startIdx 		= beginningMatcher.start();
+		int endIdx 			= beginningMatcher.end();
+		int contentStartIdx = endIdx;
+		int contentEndIdx 	= endIdx;
 		
 		// se viene trovato nuovamente non è univoco
-		if (m.find())
+		if (beginningMatcher.find())
 			return DUPLICATE_NODE;
 		
-		m = genericElement.matcher(xmlStr);
+		Matcher genericMatcher = genericElement.matcher(xmlStr);
 		
 		// cerchiamo gli elementi sia di apertura che di chiusura successivi e teniamo il conto di quelli aperti non chiusi
 		int openCount = 1;
-		while(m.find(endIndex)) {
-			String matched = m.group();
+		while (genericMatcher.find(endIdx)) {
+			String matched = genericMatcher.group();
 			
-			endIndex = m.end();
-			contentEndIndex = m.start();
+			endIdx = genericMatcher.end();
+			contentEndIdx = genericMatcher.start();
 			
 			if(matched.startsWith("</")) openCount--; else openCount++;
 			
@@ -131,8 +131,8 @@ public class XmlAsStrUtility
 		// quindi l'xml non è valido
 		if(openCount > 0) throw new RuntimeException("Invalid xml");
 		
-		if(onlyContent) return xmlStr.substring(contentStartIndex, contentEndIndex);
+		if(onlyContent) return xmlStr.substring(contentStartIdx, contentEndIdx);
 		
-		return xmlStr.substring(startIndex, endIndex);
+		return xmlStr.substring(startIdx, endIdx);
 	}
 }
