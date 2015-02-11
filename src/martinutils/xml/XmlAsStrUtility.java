@@ -11,7 +11,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Questa classe contiene metodi utili per trattare XML sotto forma di testo
- * @author martin
+ * @author martin, angelo
  */
 public class XmlAsStrUtility
 {
@@ -83,16 +83,25 @@ public class XmlAsStrUtility
 	 */
 	private String getElementOrContentAsStr(String elementName, String attribute, String value, boolean onlyContent)
 	{
-		if(elementName == null || attribute == null || value == null) throw new IllegalArgumentException();
-		if("".equals(elementName) || "".equals(attribute)) throw new IllegalArgumentException();		
+		if (elementName == null || attribute == null || value == null)
+			throw new IllegalArgumentException();
+		if ("".equals(elementName) || "".equals(attribute))
+			throw new IllegalArgumentException();		
 		
-		Pattern beginningElement = Pattern.compile("<" + Pattern.quote(elementName) + " ?[^>]* +" + Pattern.quote(attribute) + " ?= ?\"" + Pattern.quote(value) + "\" ?[^>]*>");
-		Pattern genericElement = Pattern.compile("</? ?" + Pattern.quote(elementName) + "[^>]*>");
+		String beginningElementStr 	= String.format("<%s ?[^>]* +%s ?= ?\"%s\" ?[^>]*>",
+										Pattern.quote(elementName), Pattern.quote(attribute), Pattern.quote(value) );
+		
+		String genericElementStr 	= String.format("</? ?%s[^>]*>",
+										Pattern.quote(elementName)) ;
+		
+		Pattern beginningElement 	= Pattern.compile(beginningElementStr);
+		Pattern genericElement 		= Pattern.compile(genericElementStr);
 		
 		Matcher m = beginningElement.matcher(xmlStr);
 		
 		// cerca l'elemento di apertura voluto se non c'è restituiamo vuoto
-		if(! m.find()) return "";
+		if (! m.find())
+			return "";
 		
 		int startIndex = m.start();
 		int endIndex = m.end();
@@ -100,7 +109,8 @@ public class XmlAsStrUtility
 		int contentEndIndex = endIndex;
 		
 		// se viene trovato nuovamente non è univoco
-		if(m.find()) return DUPLICATE_NODE;
+		if (m.find())
+			return DUPLICATE_NODE;
 		
 		m = genericElement.matcher(xmlStr);
 		
