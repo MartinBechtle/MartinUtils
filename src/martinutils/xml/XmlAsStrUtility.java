@@ -1,6 +1,8 @@
 package martinutils.xml;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -54,7 +56,7 @@ public class XmlAsStrUtility
 	 */
 	public String getElementAsStr(String elementName, String attribute, String value)
 	{
-		return "";
+		return getElementOrContentAsStr(elementName, attribute, value, false);
 	}
 	
 	/**
@@ -67,6 +69,58 @@ public class XmlAsStrUtility
 	 */
 	public String getElementContentAsStr(String elementName, String attribute, String value)
 	{
-		return "";
+		return getElementOrContentAsStr(elementName, attribute, value, true);
+	}
+	
+	/**
+	 * Cerca un elemento nell'XML in base al nome e in base ad un attributo che lo possa identificare univocamente
+	 * 
+	 * @param elementName il nome dell'elemento XML desiderato
+	 * @param attribute il nome dell'attributo identificatore
+	 * @param value il valore dell'attributo identificatore
+	 * @param onlyContent flag che fa escludere il tag stesso dalla stringa
+	 * @return Se il nodo viene trovato, restituisce una stringa con il contenuto testuale del nodo. Può contenere le tag di apertura e chiusura del nodo stesso in base al flag onlyContent.
+	 */
+	private String getElementOrContentAsStr(String elementName, String attribute, String value, boolean onlyContent)
+	{
+		
+		Pattern beginningElement = Pattern.compile("<" + Pattern.quote(elementName) + " +[^>]* " + Pattern.quote(attribute) + " ?= ?\"" + Pattern.quote(value) + "\" [^>]*>");
+		Pattern genericElement = Pattern.compile("</? ?" + Pattern.quote(elementName) + "[^>]*>");
+		
+		Matcher m = beginningElement.matcher(xmlStr);
+		
+		// cerca l'elemento di apertura voluto se non c'è restituiamo vuoto
+		if(! m.find()) return "";
+		
+		int startIndex = m.start();
+		int endIndex = m.end();
+		int contentStartIndex = endIndex;
+		int contentEndIndex = endIndex;
+		
+		// se viene trovato nuovamente non è univoco
+		if(m.find()) return DUPLICATE_NODE;
+		
+		m = genericElement.matcher(xmlStr);
+		
+		// cerchiamo gli elementi sia di apertura che di chiusura successivi e teniamo il conto di quelli aperti non chiusi
+		int openCount = 1;
+		while(m.find(endIndex)) {
+			String matched = m.group();
+			
+			endIndex = m.end();
+			contentEndIndex = m.start();
+			
+			if(matched.startsWith("</")) openCount--; else openCount++;
+			
+			if(openCount == 0) break;
+		}
+		
+		// il matcher non ha trovato più risultati e le aperture non corrispondono alle chiusure
+		// quindi l'xml non è valido
+		if(openCount > 0) throw new RuntimeException("Invalid xml");
+		
+		if(onlyContent) return xmlStr.substring(contentStartIndex, contentEndIndex);
+		
+		return xmlStr.substring(startIndex, endIndex);
 	}
 }
