@@ -65,7 +65,7 @@ public class XmlAsStrUtility
 	 * @return Se il nodo viene trovato, restituisce una stringa con il contenuto testuale del nodo, <strong><em>escluse</em></strong> le tag di apertura e chiusura del nodo stesso.
 	 * Se il nodo non viene trovato, stringa vuota. Se il nodo non è univocamente identificato, ma se ne matchano diversi in base ai criteri scelti stringa DUPLICATE_NODE (costante in questa classe)
 	 */
-	public String extractElementContentAsStr(String elementName, String attribute, String value)
+	public String getElementContentAsStr(String elementName, String attribute, String value)
 	{
 		return "";
 	}
