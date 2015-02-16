@@ -38,6 +38,11 @@ public class StringUtil
 		}
 	}
 	
+	public static boolean isInteger(String str)
+	{
+		return tryParseInt(str) != null;
+	}
+	
 	/**
 	 * Tells wether a String is a number. Quite different from commons.io.StringUtils.isNumeric().
 	 * @param str

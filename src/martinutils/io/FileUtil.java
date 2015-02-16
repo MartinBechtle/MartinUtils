@@ -185,6 +185,21 @@ public class FileUtil
 	}
 	
 	/**
+	 * Cambia l'estensione al nome di un file
+	 * @param fileName il nome del file
+	 * @param la nuova estensione, con o senza il punto
+	 * @return il nome del file con l'estensione cambiata
+	 */
+	public static String changeExtension(String fileName, String newExt)
+	{
+		String fileNameNoExt = getFileNameNoExt(fileName);
+		if (!newExt.startsWith("."))
+			newExt = "." + newExt;
+		
+		return fileNameNoExt + newExt;
+	}
+	
+	/**
 	 * Restituisce l'estensione di un file, controllandone il nome
 	 * @param file
 	 * @return stringa vuota se non ha alcuna estensione
