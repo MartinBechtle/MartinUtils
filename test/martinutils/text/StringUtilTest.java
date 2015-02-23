@@ -1,4 +1,4 @@
-package martinutils.text.test;
+package martinutils.text;
 
 import static org.junit.Assert.*;
 

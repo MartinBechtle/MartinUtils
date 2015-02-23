@@ -113,6 +113,15 @@ public class LineWriter
 	}
 	
 	/**
+	 * Settando l'autoescape a true i separatori di riga e di colonna saranno automaticamente rimpiazzati con uno spazio vuoto
+	 * @param value
+	 */
+	public void setAutoEscape(boolean value)
+	{
+		this.autoescape = value;
+	}
+	
+	/**
 	 * Imposta il formato di output a Csv. Ovvero: separatore di righe newline e separatore colonne virgola. 
 	 * Le colonne saranno wrappate in virgolette "" e queste saranno escapate a loro volta da una virgoletta.
 	 * @return reference a questa istanza per method chaining
@@ -211,17 +220,26 @@ public class LineWriter
 	
 	private boolean wrap = false;
 	private boolean escape = false;
+	private boolean autoescape = false;
 	
 	private String wrapAndEscape(String col)
 	{
 		if (wrap)
 			col = String.format("%s%s%s", colWrapper, col, colWrapper);
 		
+		if (autoescape)
+			col = col.replace(lineSeparator, " ").replace(colSeparator, " ");
+		
 		if (escape)
 			for (EscapeSequence seq : escapeSequences)
 				col = col.replace(seq.match, seq.replacement);
 		
 		return col;
+	}
+	
+	public String printAsStr()
+	{
+		return sb.toString();
 	}
 }
 
