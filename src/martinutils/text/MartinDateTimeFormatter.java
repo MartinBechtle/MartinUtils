@@ -18,6 +18,7 @@ public class MartinDateTimeFormatter
 	
 	protected String timeFormat = "HH:mm:ss";
 	protected String dateFormat = "yyyy/MM/dd";
+	protected String dateTimeFormat = null;
 	
 	protected TimeZone timeZone = TimeZone.getDefault();
 	
@@ -106,6 +107,17 @@ public class MartinDateTimeFormatter
 	}
 	
 	/**
+	 * Settando il formato DateTime si overridano i due formati distinti DateFormat e TimeFormat
+	 * @param format
+	 * @return un riferimento a questa stessa istanza per method chaining
+	 */
+	public MartinDateTimeFormatter setDateTimeFormat(String format)
+	{
+		dateTimeFormat = format;
+		return this;
+	}
+	
+	/**
 	 * Chiamando questo metodo si imposta il fuso orario (il default è quello della jvm)
 	 * @return un riferimento a questa stessa istanza per method chaining
 	 */
@@ -175,12 +187,17 @@ public class MartinDateTimeFormatter
 	{
 		String format = "";
 		
-		if (showDate && showTime)
-			format = dateFormat + " " + timeFormat;
-		else if (showDate)
-			format = dateFormat;
-		else if (showTime)
-			format = timeFormat;
+		if (dateTimeFormat == null)
+		{
+			if (showDate && showTime)
+				format = dateFormat + " " + timeFormat;
+			else if (showDate)
+				format = dateFormat;
+			else if (showTime)
+				format = timeFormat;
+		}
+		else
+			format = dateTimeFormat;
 		
 		if (!displaySec)
 			format = format.replaceAll("[ :,\\.;]ss", "");

@@ -89,5 +89,8 @@ public class MartinDateTimeFormatterTest
 		formatter = new MartinDateTimeFormatter().showDate().showTime().displaySec()
 				.setDateFormat("yyyy/MM/dd").setTimeFormat("HH:mm:ss").setTimeZone("Asia/Tokyo");
 		assertEquals("2015/02/23 22:29:50", formatter.format(date) );
+		
+		formatter.setDateTimeFormat("yyyy_mm"); // si testa un formato custom
+		assertEquals("2015_29", formatter.format(date) );
 	}
 }
