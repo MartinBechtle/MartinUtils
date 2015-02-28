@@ -11,7 +11,9 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -333,5 +335,58 @@ public class FileUtil
 			ext = ext.substring(1);
 		
 		return listFiles(directory, new FileNameFilterByExt(ext));
+	}
+	
+	/**
+	 * Inserisce in una mappa tutti i file trovati nella directory
+	 * @param directory la directory da cui prendere i file
+	 * @return una hashmap la cui chiave è il nome del file (stringa) e il valore l'oggetto file
+	 */
+	public static Map<String, File> mapFiles(File directory)
+	{
+		return mapXmlFiles(directory, null);
+	}
+	
+	/**
+	 * Inserisce in una mappa tutti i file XML trovati nella directory
+	 * @param directory la directory da cui prendere i file
+	 * @return una hashmap la cui chiave è il nome del file (stringa) e il valore l'oggetto file
+	 */
+	public static Map<String, File> mapXmlFiles(File directory)
+	{
+		return mapXmlFiles(directory, new XmlFileFilter());
+	}
+	
+	/**
+	 * Inserisce in una mappa tutti i file di un certo tipo trovati nella directory
+	 * @param directory la directory da cui prendere i file
+	 * @param ext l'estensione dei file da prendere
+	 * @return una hashmap la cui chiave è il nome del file (stringa) e il valore l'oggetto file
+	 */
+	public static Map<String, File> mapFilesByExt(File directory, String ext)
+	{
+		if (StringUtils.isEmpty(ext))
+			throw new IllegalArgumentException("ext cannot be null");
+		if (ext.startsWith("."))
+			ext = ext.substring(1);
+		
+		return mapXmlFiles(directory, new FileNameFilterByExt(ext));
+	}
+	
+	/**
+	 * Inserisce in una mappa tutti i file trovati nella directory
+	 * @param directory la directory da cui prendere i file
+	 * @param filter un filtro opzionale
+	 * @return una hashmap la cui chiave è il nome del file (stringa) e il valore l'oggetto file
+	 */
+	private static Map<String, File> mapXmlFiles(File directory, FilenameFilter filter)
+	{
+		List<File> files = FileUtil.listFiles(directory, filter);
+		Map<String, File> filesMap = new HashMap<>(); // mappa <nomefile, file> di tutti i file nella inputDir
+		
+		for (File file : files)
+			filesMap.put(file.getName(), file);
+		
+		return filesMap;
 	}
 }
