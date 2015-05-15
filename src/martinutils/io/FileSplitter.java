@@ -116,7 +116,9 @@ public class FileSplitter
 		if (oldWriter != null)
 			oldWriter.close();
 		
-		String newChunkPath = fileRootDir + File.separator + fileNameNoExt + fileCounter++ + fileExt;
+		fileCounter++;
+		String _fileCounter = fileCounter > 9 ? "" + fileCounter : "0" + fileCounter;
+		String newChunkPath = fileRootDir + File.separator + fileNameNoExt + _fileCounter + fileExt;
 		File newFile = new File(newChunkPath);
 		return FileUtil.getUTF8Writer(newFile);
 	}

@@ -3,6 +3,7 @@ package martinutils.io;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.mozilla.universalchardet.UniversalDetector;
 
 public class FileUtil
 {
@@ -252,6 +254,23 @@ public class FileUtil
 	}
 	
 	/**
+	 * Check if given file exists, is readable and is not a directory. 
+	 * @param file
+	 * @return an error message if an error occurs, else null
+	 */
+	public static String checkFileExistsReadableSoft(File file)
+	{
+		if (!file.exists())
+			return "File does not exist: " + file;
+		if (!file.canRead())
+			return "File not readable: " + file;
+		if (file.isDirectory())
+			return "File cannot be a directory: " + file;
+		
+		return null;
+	}
+	
+	/**
 	 * Check if the given file is a directory, which also is accessible and writable, else throw IOException
 	 * @param dir
 	 * @throws IOException
@@ -388,5 +407,50 @@ public class FileUtil
 			filesMap.put(file.getName(), file);
 		
 		return filesMap;
+	}
+	
+	/**
+	 * Prova a indovinare l'encoding di un file
+	 * @param fileName il path del file da analizzare
+	 * @return il Charset detectato oppure quello default di sistema se non detectato
+	 */
+	public static Charset tryDetectEncoding(String fileName)
+	{
+		byte[] buf = new byte[4096];
+	    
+		UniversalDetector detector = null;
+		try (FileInputStream fis = new FileInputStream(fileName))
+		{
+			detector = new UniversalDetector(null);
+
+		    int nread;
+		    while ((nread = fis.read(buf)) > 0 && !detector.isDone()) {
+		      detector.handleData(buf, 0, nread);
+		    }
+		}
+		catch (IOException e) {
+			// ignore
+		}
+		finally {
+			detector.dataEnd();
+		}
+
+	    String encoding = detector.getDetectedCharset();
+	    detector.reset();
+	    return encoding != null ? Charset.forName(encoding) : Charset.defaultCharset();
+	}
+	
+	/**
+	 * Crea un BufferedReader con l'autodetect del charset. Se il charset non è riconoscibile viene usato quello di default del sistema
+	 * @param fileName
+	 * @return
+	 * @throws IOException 
+	 */
+	public static BufferedReader newBufferedReader(File file) throws IOException
+	{
+		String filePath = file.getAbsolutePath();
+		Path path = FileSystems.getDefault().getPath(filePath);
+		Charset cs = tryDetectEncoding(filePath);
+		return java.nio.file.Files.newBufferedReader( path, cs);
 	}
 }

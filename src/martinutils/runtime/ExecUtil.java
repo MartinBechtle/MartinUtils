@@ -17,4 +17,15 @@ public class ExecUtil
 		System.err.println(errMsg);
 		System.exit(-1);
 	}
+	
+	/**
+	 * Stampa "Usage: className usage" in stderr e fa exit(-1)
+	 * @param className
+	 * @param usage
+	 */
+	public static void usage(String className, String usage)
+	{
+		String msg = String.format("Usage: %s %s", className, usage);
+		die(msg);
+	}
 }
