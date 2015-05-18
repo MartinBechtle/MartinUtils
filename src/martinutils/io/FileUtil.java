@@ -432,12 +432,17 @@ public class FileUtil
 			// ignore
 		}
 		finally {
-			detector.dataEnd();
+			if (detector != null) detector.dataEnd();
 		}
-
-	    String encoding = detector.getDetectedCharset();
-	    detector.reset();
-	    return encoding != null ? Charset.forName(encoding) : Charset.defaultCharset();
+		
+		if (detector != null)
+		{
+			String encoding = detector.getDetectedCharset();
+		    detector.reset();
+		    return Charset.forName(encoding);
+		}
+	    
+	    return Charset.defaultCharset();
 	}
 	
 	/**
@@ -451,6 +456,6 @@ public class FileUtil
 		String filePath = file.getAbsolutePath();
 		Path path = FileSystems.getDefault().getPath(filePath);
 		Charset cs = tryDetectEncoding(filePath);
-		return java.nio.file.Files.newBufferedReader( path, cs);
+		return java.nio.file.Files.newBufferedReader(path, cs);
 	}
 }
