@@ -439,7 +439,9 @@ public class FileUtil
 		{
 			String encoding = detector.getDetectedCharset();
 		    detector.reset();
-		    return Charset.forName(encoding);
+		    
+		    if ( !StringUtils.isEmpty(encoding))
+		    	return Charset.forName(encoding);
 		}
 	    
 	    return Charset.defaultCharset();
