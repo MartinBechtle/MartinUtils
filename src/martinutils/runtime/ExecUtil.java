@@ -4,11 +4,7 @@ public class ExecUtil
 {
 	public static boolean isTrue(String str)
 	{
-		if (str == null)
-			return false;
-		
-		str = str.toLowerCase();
-		return str.equals("true") || str.equals("1");
+		return "1".equals(str) || "true".equalsIgnoreCase(str);
 	}
 
 	/**
