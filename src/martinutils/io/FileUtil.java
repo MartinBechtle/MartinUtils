@@ -20,6 +20,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 
+import com.google.common.io.Files;
+
 public class FileUtil
 {
 	public static String readUTF8File(File file) throws IOException
@@ -459,5 +461,19 @@ public class FileUtil
 		Path path = FileSystems.getDefault().getPath(filePath);
 		Charset cs = tryDetectEncoding(filePath);
 		return java.nio.file.Files.newBufferedReader(path, cs);
+	}
+	
+	/**
+	 * Sposta un file in una nuova cartella.
+	 * @param src il file da spostare
+	 * @param destinationDir la cartella di destinazione
+	 */
+	public static void move(File src, File destinationDir) throws IOException
+	{
+		if (src == null || destinationDir == null)
+			throw new IllegalArgumentException("args cannot be null");
+		
+		File destinationFile = new File( getDir(destinationDir.getAbsolutePath()) + src.getName() );
+		Files.move(src, destinationFile);
 	}
 }

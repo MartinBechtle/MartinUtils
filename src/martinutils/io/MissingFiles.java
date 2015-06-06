@@ -11,7 +11,7 @@ public class MissingFiles
 	public static void main(String[] args) 
 	{
 		if (args.length != 2) {
-			System.err.println("Usage: MissingFiles dir1 dir2");
+			System.err.println("Usage: MissingFiles completeDir incompleteDir");
 			System.exit(-1);
 		}
 		
