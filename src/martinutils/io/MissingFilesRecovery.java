@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import martinutils.runtime.ExecUtil;
+import org.apache.commons.io.FileUtils;
 
-import com.google.common.io.Files;
+import martinutils.runtime.ExecUtil;
 
 /**
  * Confronta una directory "complete" con una "incomplete" per determinare quali file mancano nella incomplete per essere identica alla complete. 
@@ -60,7 +60,7 @@ public class MissingFilesRecovery
 					ExecUtil.die("Unexpected bug: destination already exists");
 				
 				System.out.println("Copying " + fileName);
-				Files.copy(file, destination);
+				FileUtils.copyFileToDirectory(file, new File(outputDirPath));
 			}
 		}
 		else
