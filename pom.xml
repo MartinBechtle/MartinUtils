@@ -44,24 +44,25 @@
 			</plugin>
 		</plugins>
 		<extensions>
-	        <extension>
-	            <groupId>org.springframework.build</groupId>
-	            <artifactId>aws-maven</artifactId>
-	            <version>5.0.0.RELEASE</version>
-	        </extension>
+			<extension>
+			    <!-- Needed to support s3 repositories, please set s3 key and secret key in ~/.m2/settings.xml --> 
+				<groupId>org.springframework.build</groupId>
+				<artifactId>aws-maven</artifactId>
+				<version>5.0.0.RELEASE</version>
+			</extension>
 	    </extensions>
 	</build>
 	
 	<distributionManagement>
 		<repository>
-				<id>martin-maven-s3-release</id>
-				<name>AWS Release Repository</name>
-				<url>s3://martin-maven/release</url>
+			<id>martin-maven-s3-release</id>
+			<name>AWS Release Repository</name>
+			<url>s3://martin-maven/release</url>
 		</repository>
 		<snapshotRepository>
-				<id>martin-maven-s3-snapshot</id>
-				<name>AWS Snapshot Repository</name>
-				<url>s3://martin-maven/snapshot</url>
+			<id>martin-maven-s3-snapshot</id>
+			<name>AWS Snapshot Repository</name>
+			<url>s3://martin-maven/snapshot</url>
 		</snapshotRepository>
 	</distributionManagement>
 	
