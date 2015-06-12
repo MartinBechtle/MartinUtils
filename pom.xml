@@ -7,6 +7,10 @@
 	<name>Martin Utils</name>
 	<description>Martin's personal utilities</description>
 	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>commons-io</groupId>
