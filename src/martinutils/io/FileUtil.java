@@ -155,7 +155,7 @@ public class FileUtil
 	}
 	
 	/**
-	 * Restituisce true se l'array di file passati (tipicamente figli di una directory) � vuoto (nullo)
+	 * Restituisce true se l'array di file passati (tipicamente figli di una directory) è vuoto (nullo)
 	 * @param files
 	 * @return
 	 */

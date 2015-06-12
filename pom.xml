@@ -1,10 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.go_ictlabs</groupId>
 	<artifactId>martin-utils</artifactId>
 	<version>1.0.0-RELEASE</version>
 	<name>Martin Utils</name>
 	<description>Martin's personal utilities</description>
+	
 	<dependencies>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -27,6 +29,7 @@
 			<version>4.4</version>
 		</dependency>
 	</dependencies>
+	
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
@@ -40,5 +43,26 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<extensions>
+	        <extension>
+	            <groupId>org.springframework.build</groupId>
+	            <artifactId>aws-maven</artifactId>
+	            <version>5.0.0.RELEASE</version>
+	        </extension>
+	    </extensions>
 	</build>
+	
+	<distributionManagement>
+		<repository>
+				<id>martin-maven-s3-release</id>
+				<name>AWS Release Repository</name>
+				<url>s3://martin-maven/release</url>
+		</repository>
+		<snapshotRepository>
+				<id>martin-maven-s3-snapshot</id>
+				<name>AWS Snapshot Repository</name>
+				<url>s3://martin-maven/snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
 </project>
