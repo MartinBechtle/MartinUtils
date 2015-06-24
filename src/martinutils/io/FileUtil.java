@@ -47,6 +47,12 @@ public class FileUtil
 		return FileUtils.readFileToString(file);
 	}
 	
+	public static String readTextFileAutoDetectEncoding(File file) throws IOException
+	{
+		Charset encoding = tryDetectEncoding(file.getAbsolutePath());
+		return FileUtils.readFileToString(file, encoding);
+	}
+	
 	public static void saveTextFile(File file, String fileContent) throws IOException
 	{
 		FileUtils.writeStringToFile(file, fileContent);
@@ -337,7 +343,7 @@ public class FileUtil
 	 */
 	public static List<File> listXmlFiles(File directory)
 	{
-		return listFiles(directory, new XmlFileFilter());
+		return listFiles(directory, new martinutils.io.XmlFileFilter());
 	}
 	
 	/**
@@ -373,7 +379,7 @@ public class FileUtil
 	 */
 	public static Map<String, File> mapXmlFiles(File directory)
 	{
-		return mapXmlFiles(directory, new XmlFileFilter());
+		return mapXmlFiles(directory, new martinutils.io.XmlFileFilter());
 	}
 	
 	/**
