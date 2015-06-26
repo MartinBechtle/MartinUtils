@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import martinutils.text.StringUtil;
 
 /**
  * Serve ad effettuare il merging delle colonne di file. I file devono essere UTF-8, le colonne separate da \t e le righe da \n.
@@ -18,8 +21,8 @@ import java.util.Map;
  */
 public class ColumnMerger
 {
-	static File[] files;
-	static int[][] columns;
+	private List<File> files;
+	private Map<File, Integer[]> columns;
 	
 	public static void main(String[] args) throws IOException
 	{		
@@ -28,34 +31,38 @@ public class ColumnMerger
 		if (argsLen == 0 || (args.length % 2) == 1)
 			usage();
 		
-		// Il numero di file pertanto è la metà del numero di argomenti
-		int filesNum = args.length / 2;
-		files = new File[filesNum];
-		columns = new int[filesNum][];
-		
 		// Parsing degli argomenti che contengono i nomi file e le colonne
-		parseFiles(args, filesNum);
-		parseColumns(args, filesNum);
-		
+		ColumnMerger cm = new ColumnMerger();
+		cm.parseArguments(args);
 		System.out.println("Arguments ok. Merging files...");
 		
 		// Merge dei file e salvataggio nella stessa directory del primo file
-		String mergedFileContent = mergeFiles();
-		String directory = files[0].getParentFile().getAbsolutePath();
-		File mergedFile = new File( directory + File.separator + "merged.txt");
+		String mergedFileContent = cm.mergeFiles();
+		String directory = FileUtil.getDir( cm.files.get(0).getParentFile().getAbsolutePath() );
+		File mergedFile = new File( directory + "merged.txt");
 		FileUtil.saveUtf8File(mergedFile, mergedFileContent);
 		
 		// No need to close readers and writers since this is a standalone java program
 		System.out.println("...Done");
 	}
 	
-	private static String mergeFiles() throws IOException
-	{
-		int len = files.length;
-		BufferedReader[] readers = new BufferedReader[len];
+	/**
+	 * <p>Reads multiple files and joins the selected columns in one single file.</p>
+	 * <p><strong>Usage:</strong> create a new instance, pass files with the addFile method and then get the result with mergeFiles</p>
+	 */
+	public ColumnMerger() {
 		
+	}
+	
+	public String mergeFiles() throws IOException
+	{
+		int len = files.size();
+		if (len == 0)
+			throw new IllegalStateException("Please add files to this object before merging");
+			
+		BufferedReader[] readers = new BufferedReader[len];
 		for (int i = 0; i < len; i++)
-			readers[i] = FileUtil.getUTF8Reader(files[i]);
+			readers[i] = FileUtil.getUTF8Reader(files.get(i));
 		
 		StringBuilder writer = new StringBuilder();
 		
@@ -69,27 +76,28 @@ public class ColumnMerger
 			for (int i = 0; i < len; i++)
 			{
 				String line = readers[i].readLine();
+				File file = this.files.get(i);
 
 				// Se una riga di qualunque file è null, si interrompe il ciclo
 				if (line == null) {
 					condition = false;
 					break;
 				}
-				
 
 				if (rowNum > 1 && i == 0)
 					writer.append("\n");
 				
 				// splitto la riga in colonne e verifico che siano in numero giusto (devono essere ALMENO quante indicate nel numero di estrazione più alto)
-				int colsNum = columns[i].length;
-				int colsMax = getHighest(i);
+				Integer[] columns = this.columns.get(file);
+				int colsNum = columns.length;
+				int colsMax = getHighest(i, columns);
 				
 				String[] splitRow = line.split("\t");
 				int splitRowLen = splitRow.length;
 				if (splitRowLen < colsMax)
 				{
 					if (splitRowLen < colsMax - 1) // c'è sicuramente un errore
-						fatalErr("File " + files[i] + " at row " + rowNum + ": wrong number of columns, expected at least " + colsMax);
+						fatalErr("File " + file + " at row " + rowNum + ": wrong number of columns, expected at least " + colsMax);
 					else // manca solo l'ultima colonna... può essere che sia una stringa nulla, la aggiungo
 					{
 						int newSplitLen = splitRowLen + 1;
@@ -106,12 +114,12 @@ public class ColumnMerger
 				int columnToExtract;
 				for (int j = 0; j < loopLen; j++)
 				{
-					columnToExtract = columns[i][j] - 1;
+					columnToExtract = columns[j] - 1;
 					writer.append( splitRow[columnToExtract] + "\t");
 				}
 				
 				// tratto l'ultima
-				columnToExtract = columns[i][loopLen] - 1;
+				columnToExtract = columns[loopLen] - 1;
 				writer.append( splitRow[columnToExtract]);
 				
 				// va omesso il \t finale soltanto se siamo all'ultima colonna di tutti i file e non del corrente
@@ -134,13 +142,13 @@ public class ColumnMerger
 	
 	private static Map<Integer, Integer> highestColsMap = new HashMap<>();
 	
-	private static int getHighest(int i)
+	private int getHighest(int i, Integer[] columns)
 	{
 		Integer result = highestColsMap.get(i);
 		if (result == null)
 		{
 			int highest = 0;
-			for (int z : columns[i])
+			for (int z : columns)
 				if (z > highest)
 					highest = z;
 			result = highest;
@@ -149,12 +157,11 @@ public class ColumnMerger
 		return result;
 	}
 	
-	private static void parseFiles(String[] args, int filesNum)
+	private void parseArguments(String[] args)
 	{
-		// Creo gli oggetti File
-		for (int i = 0; i < filesNum; i++)
+		for (int i = 0; i < args.length - 1; i += 2)
 		{
-			String fileName = args[i*2]; // l'i-esima stringa nomefile è alla (2i)-esima posizione degli argomenti 
+			String fileName = args[i];
 			File file = new File(fileName);
 			
 			// Controlli vari
@@ -165,39 +172,43 @@ public class ColumnMerger
 			if (!file.canRead())
 				fatalErr("File " + file + " cannot be read");
 			
-			// Tutto a posto, si aggiunge il file all'array
-			files[i] = file;
+			// Parsing delle colonne
+			Integer[] columns = parseColumns(args[i+1]);
+			if (columns == null)
+				fatalErr("Invalid columns format in argument " + i);
+			
+			// Tutto a posto, si aggiunge il file alla lista
+			addFile(file, columns);
 		}
 	}
-		
-	private static void parseColumns(String[] args, int filesNum)
+
+	public void addFile(File file, Integer[] columns)
 	{
-		for (int i = 0; i < filesNum; i++)
+		files.add(file);
+		this.columns.put(file, columns);
+	}
+		
+	// Returns null on error
+	private Integer[] parseColumns(String columnsStr)
+	{
+		String[] splitted = columnsStr.split(";");
+			
+		// Splitto la stringa sul separatore ; e conto il numero di colonne
+		int colsNum = splitted.length;
+		if (colsNum == 0)
+			return null;
+			
+		// Creo un array di interi
+		Integer[] result = new Integer[colsNum];
+		for (int i = 0; i < colsNum; i++)
 		{
-			String columnsStr = args[i*2+1]; // l'i-esima stringa descrittore delle colonne è alla (2i + 1)-esima posizione degli argomenti 
-			String[] splitted = columnsStr.split(";");
-			
-			// Splitto la stringa sul separatore ; e conto il numero di colonne
-			int colsNum = splitted.length;
-			if (colsNum == 0)
-				usage();
-			
-			// Creo un array di interi nell'i-esimo indice di columns e cerco di popolarlo
-			columns[i] = new int[colsNum];
-			int j = 0;
-			for (String str : splitted)
-			{
-				int colNum = 0;
-				try { colNum = Integer.parseInt(str); }
-				catch(NumberFormatException e) { usage(); }
-				
-				if (colNum < 1)
-					usage();
-				
-				columns[i][j] = colNum;
-				++j;
-			}
+			Integer colNum = StringUtil.tryParseInt(splitted[i]);
+			if (colNum == null)
+				return null;
+			result[i] = colNum;
 		}
+		
+		return result;
 	}
 	
 	private static void usage()
@@ -209,7 +220,6 @@ public class ColumnMerger
 	
 	private static void fatalErr(String msg)
 	{
-		System.err.println(msg);
-		System.exit(-1);
+		throw new RuntimeException(msg);
 	}
 }
