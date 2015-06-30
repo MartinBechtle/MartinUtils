@@ -3,6 +3,7 @@ package martinutils.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +22,8 @@ import martinutils.text.StringUtil;
  */
 public class ColumnMerger
 {
-	private List<File> files;
-	private Map<File, Integer[]> columns;
+	private List<File> files = new ArrayList<>();
+	private Map<File, Integer[]> columns = new HashMap<>();
 	
 	public static void main(String[] args) throws IOException
 	{		

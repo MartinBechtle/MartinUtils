@@ -138,6 +138,22 @@ public class LineWriter
 	}
 	
 	/**
+	 * Imposta il formato di output a Csv per Excel. Ovvero: separatore di righe newline e separatore colonne puntoevirgola. 
+	 * Le colonne saranno wrappate in virgolette "" e queste saranno escapate a loro volta da una virgoletta.
+	 * @return reference a questa istanza per method chaining
+	 */
+	public LineWriter setOutputAsExcelCsv()
+	{
+		this.lineSeparator = "\n";
+		this.colSeparator = ";";
+		this.colWrapper = "\"";
+		
+		this.wrap = true;
+		
+		return this;
+	}
+	
+	/**
 	 * Stampa una riga
 	 * @param cols
 	 * @throws IOException

@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.nio.file.DirectoryStream.Filter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
@@ -167,4 +168,55 @@ public class PathUtil
 			return entry.getFileName().toString().endsWith(".xml");
 		}
 	};
+	
+	/**
+	 * Utility filter for streaming TXT files from a directory
+	 */
+	public static final Filter<Path> txtFileFilter = new Filter<Path>() {
+		@Override public boolean accept(Path entry) throws IOException {
+			return entry.getFileName().toString().endsWith(".xml");
+		}
+	};
+	
+	/**
+	 * Implements a Path filter by extension
+	 */
+	public static class PathFilterByExtension implements Filter<Path>
+	{
+		String extension;
+		public PathFilterByExtension(String extension) {
+			if (!extension.startsWith(".")) extension = "." + extension;
+			this.extension = extension;
+		}
+		@Override public boolean accept(Path entry) throws IOException {
+			return entry.toFile().getName().endsWith(extension);
+		}
+		
+	}
+	
+	/**
+	 * Restituisce una path col nome del file passato argomento, cambiato di estensione
+	 * @param file il file
+	 * @param newExt l'estensione, con o senza il punto iniziale
+	 * @return un oggetto Path che punta al nome con l'estensione cambiata
+	 */
+	public static Path changeExtensionToFileName(Path file, String newExt) {
+		
+		String fileName = file.toFile().getName();
+		String newName = FileUtil.changeExtension(fileName, newExt);
+		return Paths.get(newName);
+	}
+	
+	/**
+	 * Restituisce una path con la absolute path del file passato argomento, cambiato di estensione
+	 * @param file il file
+	 * @param newExt l'estensione, con o senza il punto iniziale
+	 * @return un oggetto Path che punta alla absolute path con l'estensione cambiata
+	 */
+	public static Path changeExtensionToFilePath(Path file, String newExt) {
+		
+		String filePath = file.toFile().getAbsolutePath();
+		String newPath = FileUtil.changeExtension(filePath, newExt);
+		return Paths.get(newPath);
+	}
 }
