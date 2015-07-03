@@ -231,4 +231,51 @@ public class StringUtilTest
 		assertEquals( "", StringUtil.matchesResult("hexxo", p) );
 		assertEquals( "", StringUtil.matchesResult("", p) );
 	}
+	
+	@Test
+	public void testIndexOfRegex()
+	{
+		Pattern p = Pattern.compile("hello");
+		String str = "boy, hello, hello!";
+		
+		try {
+			StringUtil.indexOfRegex(null, p, 0);
+			fail("IllegalArgumentException should be thrown");
+		}
+		catch (IllegalArgumentException e) { }
+		
+		try {
+			StringUtil.indexOfRegex(str, null, 0);
+			fail("IllegalArgumentException should be thrown");
+		}
+		catch (IllegalArgumentException e) { }
+		
+		try {
+			StringUtil.indexOfRegex(null, null, 0);
+			fail("IllegalArgumentException should be thrown");
+		}
+		catch (IllegalArgumentException e) { }
+		
+		try {
+			StringUtil.indexOfRegex(str, p, 20);
+			fail("IndexOutOfBoundsException should be thrown");
+		}
+		catch (IndexOutOfBoundsException e) { }
+		
+		try {
+			StringUtil.indexOfRegex("", p, 0);
+			fail("IndexOutOfBoundsException should be thrown");
+		}
+		catch (IndexOutOfBoundsException e) { }
+		
+		assertEquals(-1, StringUtil.indexOfRegex(str, p, 15));
+		assertEquals(5, StringUtil.indexOfRegex(str, p, 0));
+		assertEquals(12, StringUtil.indexOfRegex(str, p, 8));
+		
+		p = Pattern.compile("h[aeiou]|l");
+		assertEquals(12, StringUtil.indexOfRegex(str, p, 10));
+		
+		p = Pattern.compile("[bB]");
+		assertEquals(0, StringUtil.indexOfRegex(str, p, 0));
+	}
 }

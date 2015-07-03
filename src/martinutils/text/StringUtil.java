@@ -312,4 +312,29 @@ public class StringUtil
 		Matcher matcher = p.matcher(str);
 		return countMatches(matcher);
 	}
+	
+	/**
+	 * Restituisce il primo indice della stringa in cui viene matchato il pattern
+	 * @param str la stringa in cui cercare
+	 * @param p il pattern (regex)
+	 * @param start l'indice da cui iniziare a cercare
+	 * @return
+	 */
+	public static int indexOfRegex(CharSequence str, Pattern p, int start)
+	{
+		if (p == null)
+			throw new IllegalArgumentException("p cannot be null");
+		if (start < 0)
+			throw new IllegalArgumentException("start must be > 0");
+		if (str == null)
+			throw new IllegalArgumentException("str cannot be null");
+		if (start >= str.length())
+			throw new IndexOutOfBoundsException("start > str length");
+		
+		Matcher m = p.matcher(str);
+		if (m.find(start)) {
+			return m.start();
+		}
+		return -1;
+	}
 }
