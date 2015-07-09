@@ -364,6 +364,16 @@ public class XmlUtility
 		
 		return true;
 	}
+	
+	/**
+	 * Verifica se una stringa contiene una tag valida (non deve contenere altro che una singola tag). Sperimentale! Per ora è usata solo sul CTS
+	 * @param str la stringa da controllare
+	 * @return
+	 */
+	public static boolean isValidXmlTag(final String str)
+	{
+		return str.matches("</?[a-zA-Z0-9]+( [a-zA-Z0-9]+=\"[^\"]*\")* ?/?>");
+	}	
 }
 
 class VoidErrorHandler implements ErrorHandler
