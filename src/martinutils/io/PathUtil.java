@@ -142,7 +142,7 @@ public class PathUtil
 		List<String> lines = Files.readAllLines(file, Charset.forName("UTF-8"));
 		if (lines.size() > 0) {
 			String str = lines.get(0);
-			if (str.charAt(0) == BOM) { 
+			if (str.length() > 0 && str.charAt(0) == BOM) { 
 				lines.set(0, str.substring(1));
 			}
 		}

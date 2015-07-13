@@ -278,4 +278,18 @@ public class StringUtilTest
 		p = Pattern.compile("[bB]");
 		assertEquals(0, StringUtil.indexOfRegex(str, p, 0));
 	}
+	
+	@Test
+	public void testCountUnicodeLetters()
+	{
+		assertEquals(0, StringUtil.countUnicodeLetters(null));
+		assertEquals(0, StringUtil.countUnicodeLetters(""));
+		assertEquals(3, StringUtil.countUnicodeLetters("asd"));
+		assertEquals(0, StringUtil.countUnicodeLetters("123"));
+		assertEquals(2, StringUtil.countUnicodeLetters("1ax"));
+		assertEquals(5, StringUtil.countUnicodeLetters("ècco 'a"));
+		assertEquals(20, StringUtil.countUnicodeLetters("Néni/bácsi (tetszikezés):"));
+		assertEquals(7, StringUtil.countUnicodeLetters("漢語; Hànyǔ"));
+		assertEquals(3, StringUtil.countUnicodeLetters("$£%&/(asd)"));
+	}
 }

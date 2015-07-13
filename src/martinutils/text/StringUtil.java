@@ -337,4 +337,17 @@ public class StringUtil
 		}
 		return -1;
 	}
+	
+	/**
+	 * Restituisce il numero di lettere in una stringa, escludendo dunque numeri, spazi, punteggiatura. Utilizza la regex \pL.
+	 * @param str
+	 * @return
+	 */
+	public static int countUnicodeLetters(String str)
+	{
+		if (str == null || str.isEmpty())
+			return 0;
+		String stripped = str.replaceAll("\\pL", "");
+		return str.length() - stripped.length();
+	}
 }
