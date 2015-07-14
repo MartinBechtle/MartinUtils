@@ -350,4 +350,28 @@ public class StringUtil
 		String stripped = str.replaceAll("\\pL", "");
 		return str.length() - stripped.length();
 	}
+	
+	/**
+	 * Calcola una percentuale
+	 * @param partial
+	 * @param total
+	 * @return restituisce la percentuale sotto forma di stringa con % alla fine
+	 */
+	public static String calculatePercentStr(int partial, int total)
+	{
+		return calculatePercent(partial, total) + "%";
+	}
+	
+	/**
+	 * Calcola una percentuale
+	 * @param partial
+	 * @param total
+	 * @return retituisce la percentuale in forma numerica
+	 */
+	public static int calculatePercent(int partial, int total)
+	{
+		double percentDouble = (double)partial / (double)total;
+		int percent = (int)Math.round(percentDouble * 100);
+		return percent;
+	}
 }
