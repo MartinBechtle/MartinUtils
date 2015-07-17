@@ -131,6 +131,7 @@ public class LineWriter
 		this.lineSeparator = "\n";
 		this.colSeparator = ",";
 		this.colWrapper = "\"";
+		addEscapeSequence("\"", "\"\"");
 		
 		this.wrap = true;
 		
@@ -147,6 +148,7 @@ public class LineWriter
 		this.lineSeparator = "\n";
 		this.colSeparator = ";";
 		this.colWrapper = "\"";
+		addEscapeSequence("\"", "\"\"");
 		
 		this.wrap = true;
 		
@@ -240,15 +242,15 @@ public class LineWriter
 	
 	private String wrapAndEscape(String col)
 	{
+		if (escape)
+			for (EscapeSequence seq : escapeSequences)
+				col = col.replace(seq.match, seq.replacement);
+		
 		if (wrap)
 			col = String.format("%s%s%s", colWrapper, col, colWrapper);
 		
 		if (autoescape)
 			col = col.replace(lineSeparator, " ").replace(colSeparator, " ");
-		
-		if (escape)
-			for (EscapeSequence seq : escapeSequences)
-				col = col.replace(seq.match, seq.replacement);
 		
 		return col;
 	}
