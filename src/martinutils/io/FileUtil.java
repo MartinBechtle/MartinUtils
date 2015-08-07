@@ -369,7 +369,7 @@ public class FileUtil
 	 */
 	public static Map<String, File> mapFiles(File directory)
 	{
-		return mapXmlFiles(directory, null);
+		return mapFiles(directory, null);
 	}
 	
 	/**
@@ -379,7 +379,7 @@ public class FileUtil
 	 */
 	public static Map<String, File> mapXmlFiles(File directory)
 	{
-		return mapXmlFiles(directory, new martinutils.io.XmlFileFilter());
+		return mapFiles(directory, new martinutils.io.XmlFileFilter());
 	}
 	
 	/**
@@ -395,7 +395,7 @@ public class FileUtil
 		if (ext.startsWith("."))
 			ext = ext.substring(1);
 		
-		return mapXmlFiles(directory, new FileNameFilterByExt(ext));
+		return mapFiles(directory, new FileNameFilterByExt(ext));
 	}
 	
 	/**
@@ -404,7 +404,7 @@ public class FileUtil
 	 * @param filter un filtro opzionale
 	 * @return una hashmap la cui chiave è il nome del file (stringa) e il valore l'oggetto file
 	 */
-	private static Map<String, File> mapXmlFiles(File directory, FilenameFilter filter)
+	private static Map<String, File> mapFiles(File directory, FilenameFilter filter)
 	{
 		List<File> files = FileUtil.listFiles(directory, filter);
 		Map<String, File> filesMap = new HashMap<>(); // mappa <nomefile, file> di tutti i file nella inputDir
