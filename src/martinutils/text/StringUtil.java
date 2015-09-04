@@ -24,6 +24,21 @@ public class StringUtil
 	}
 	
 	/**
+	 * Parse an int withouth having to catch the numberformat exception
+	 * @param str
+	 * @return null if is not valid integer
+	 */
+	public static Long tryParseLong(String str)
+	{
+		try {
+			return Long.parseLong(str);
+		}
+		catch (NumberFormatException e) {
+			return null;
+		}
+	}
+	
+	/**
 	 * Parse a float withouth having to catch the numberformat exception
 	 * @param str a float with a dot as decimal separator
 	 * @return null if is not valid float
@@ -360,6 +375,16 @@ public class StringUtil
 	public static String calculatePercentStr(int partial, int total)
 	{
 		return calculatePercent(partial, total) + "%";
+	}
+	
+	/**
+	 * Calcola una percentuale
+	 * @param p la percentuale compresa fra 0 e 1
+	 * @return restituisce la percentuale moltiplicata per 100, arrotondata, con il segno % a seguire
+	 */
+	public static String calculatePercentStr(double p)
+	{
+		return Math.round(p * 100) + "%";
 	}
 	
 	/**
