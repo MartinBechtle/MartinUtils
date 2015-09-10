@@ -3,11 +3,9 @@ package martinutils.io;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
-
-
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -195,6 +193,32 @@ public class LineWriter
 			sb = new StringBuilder();
 		
 		FileUtil.saveUtf8File(file, sb.toString());
+	}
+	
+	/**
+	 * Stampa su file UTF-8 il contenuto di questa istanza. Se l'output era stato mandato su un writer, stamperà un file vuoto.
+	 * @param file
+	 * @throws IOException 
+	 */
+	public void saveToFile(Path file) throws IOException
+	{
+		if (sb == null)
+			sb = new StringBuilder();
+		
+		PathUtil.saveUtf8File(file, sb.toString());
+	}
+	
+	/**
+	 * Stampa su file il contenuto di questa istanza. Se l'output era stato mandato su un writer, stamperà un file vuoto.
+	 * @param file
+	 * @throws IOException 
+	 */
+	public void saveToFile(Path file, String charset) throws IOException
+	{
+		if (sb == null)
+			sb = new StringBuilder();
+		
+		PathUtil.saveTextFile(file, sb.toString(), charset);
 	}
 	
 	/**

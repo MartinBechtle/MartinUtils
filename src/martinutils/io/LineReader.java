@@ -3,15 +3,13 @@ package martinutils.io;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-
-
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +26,11 @@ public class LineReader implements Iterable<String[]>
 	private Set<Integer> 	constraints = null;
 	private String 			colSeparatorRegex = "\t";
 	
+	public LineReader(Path inputFile) throws IOException
+	{
+		this(inputFile.toFile());
+	}
+	
 	public LineReader(File inputFile) throws IOException
 	{
 		if (inputFile == null)
@@ -42,6 +45,11 @@ public class LineReader implements Iterable<String[]>
 	{
 		this.colSeparatorRegex = regex;
 		return this;
+	}
+	
+	public LineReader(Path inputFile, String charset) throws IOException
+	{
+		this(inputFile.toFile(), charset);
 	}
 	
 	public LineReader(File inputFile, String charset) throws IOException
