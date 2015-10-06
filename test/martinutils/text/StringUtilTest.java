@@ -1,10 +1,15 @@
 package martinutils.text;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
-
-import martinutils.text.StringUtil;
 
 import org.junit.Test;
 
@@ -291,5 +296,17 @@ public class StringUtilTest
 		assertEquals(20, StringUtil.countUnicodeLetters("Néni/bácsi (tetszikezés):"));
 		assertEquals(7, StringUtil.countUnicodeLetters("漢語; Hànyǔ"));
 		assertEquals(3, StringUtil.countUnicodeLetters("$£%&/(asd)"));
+	}
+	
+	@Test
+	public void testSortByStrLen()
+	{
+		List<String> myList = Arrays.asList("one", "two", "three", "four");
+		Collections.sort(myList, StringUtil.sortByStrLenComparator(true));
+		assertEquals("three", myList.get(3));
+		assertEquals("four", myList.get(2));
+		Collections.sort(myList, StringUtil.sortByStrLenComparator(false));
+		assertEquals("three", myList.get(0));
+		assertEquals("four", myList.get(1));
 	}
 }

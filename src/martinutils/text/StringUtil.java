@@ -1,5 +1,6 @@
 package martinutils.text;
 
+import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -398,5 +399,19 @@ public class StringUtil
 		double percentDouble = (double)partial / (double)total;
 		int percent = (int)Math.round(percentDouble * 100);
 		return percent;
+	}
+	
+	/**
+	 * Restituisce il comparator per ordinare stringhe in base alla lunghezza invece dell'ordine alfabetico
+	 * @param ascending in base alla lunghezza crescente o decrescente?
+	 */
+	public static Comparator<String> sortByStrLenComparator(final boolean ascending)
+	{
+		return new Comparator<String>() {
+			@Override public int compare(String str1, String str2) {
+				if (str1 == null) str1 = "";
+				if (str2 == null) str2 = "";
+				return ascending ? Integer.compare(str1.length(), str2.length()) : Integer.compare(str2.length(), str1.length());
+			} };
 	}
 }
