@@ -9,7 +9,7 @@ public class DateCalcUtil {
 	 * Get today's date at 00:00
 	 * @return
 	 */
-	public Date getTodayMidnight() {
+	public static Date getTodayMidnight() {
 		
 		Calendar c = Calendar.getInstance();
 
