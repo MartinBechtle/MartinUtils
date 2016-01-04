@@ -10,15 +10,19 @@ import martinutils.runtime.ExecUtil;
 
 /**
  * Confronta una directory "complete" con una "incomplete" per determinare quali file mancano nella incomplete per essere identica alla complete. 
- * Dopodichè i file mancanti vengono copiati dalla complete nella directory incomplete/missing/
+ * Dopodichè i file mancanti vengono copiati o spostati dalla complete nella directory incomplete/missing/
  * @author Martin
  */
 public class MissingFilesRecovery
 {
+	/**
+	 * @param args la directory con tutti i file, quella sospetta incompleta e infine un terzo argomento che se settato a true provoca lo spostamento dei file missing, altrimenti viene fatta la copia
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException 
 	{
-		if (args.length != 2)
-			ExecUtil.die("Usage: MissingFilesRecovery completeDir incompleteDir");
+		if (args.length != 3)
+			ExecUtil.die("Usage: MissingFilesRecovery completeDir incompleteDir move(true|false)");
 		
 		String   completeDirPath 	= FileUtil.getDir( args[0] );
 		String incompleteDirPath 	= FileUtil.getDir( args[1] );
@@ -31,6 +35,8 @@ public class MissingFilesRecovery
 		
 		Set<String>   completeFileNames = new HashSet<>();
 		Set<String> incompleteFileNames = new HashSet<>();
+		
+		boolean move = ExecUtil.isTrue( args[2] );
 		
 		for (File file : completeFiles)
 			completeFileNames.add( file.getName() );
@@ -59,8 +65,15 @@ public class MissingFilesRecovery
 				if ( destination.exists() )
 					ExecUtil.die("Unexpected bug: destination already exists");
 				
-				System.out.println("Copying " + fileName);
-				FileUtils.copyFileToDirectory(file, new File(outputDirPath));
+				if (move) {
+					System.out.println("Moving " + fileName);
+					FileUtils.moveFileToDirectory(file, new File(outputDirPath), false);
+				}
+				else {
+					System.out.println("Copying " + fileName);
+					FileUtils.copyFileToDirectory(file, new File(outputDirPath));
+				}
+				
 			}
 		}
 		else
