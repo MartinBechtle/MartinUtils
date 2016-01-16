@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.go_ictlabs</groupId>
 	<artifactId>martin-utils</artifactId>
-	<version>1.1.12-RELEASE</version>
+	<version>1.1.13-RELEASE</version>
 	<name>Martin Utils</name>
 	<description>Martin's personal utilities</description>
 	
