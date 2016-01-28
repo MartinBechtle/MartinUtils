@@ -7,8 +7,27 @@ import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
 
+import martinutils.runtime.Assert;
+
 public class StringUtil
 {
+	
+	/**
+	 * Takes in input a single text string which is a compund of different lines separated by /n or /r/n and returns an array of lines
+	 * @param text 
+	 * @return
+	 */
+	public String[] splitLines(String text) {
+		Assert.notNull(text, "text");
+		
+		// Transform all newlines in carriage return + newline, then remove all duplicates.
+		// this way any file will have a \r\n as new line sequence
+		text = text.replaceAll("\n", "\r\n");
+		text = text.replaceAll("\r\r", "\r");
+		
+		return text.split("\r\n");
+	}
+	
 	/**
 	 * Parse an int withouth having to catch the numberformat exception
 	 * @param str
