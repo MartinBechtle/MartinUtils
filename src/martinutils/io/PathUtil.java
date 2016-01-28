@@ -4,12 +4,16 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.DirectoryStream;
 import java.nio.file.DirectoryStream.Filter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class PathUtil
 {
@@ -191,7 +195,6 @@ public class PathUtil
 		@Override public boolean accept(Path entry) throws IOException {
 			return entry.toFile().getName().endsWith(extension);
 		}
-		
 	}
 	
 	/**
@@ -218,5 +221,38 @@ public class PathUtil
 		String filePath = file.toFile().getAbsolutePath();
 		String newPath = FileUtil.changeExtension(filePath, newExt);
 		return Paths.get(newPath);
+	}
+	
+	/**
+	 * Restituisce la lista dei file (come oggetti Path) in una directory
+	 * @param directory la directory in cui cercare
+	 * @param ext un'estensione da usare come filtro per i file, facoltativa
+	 * @return
+	 * @throws IOException
+	 */
+	public static List<Path> listFilesByExt(Path directory, String ext) throws IOException {
+		
+		DirectoryStream<Path> dirStream;
+		if (StringUtils.isEmpty(ext)) {
+			dirStream = Files.newDirectoryStream(directory, new PathUtil.PathFilterByExtension(ext));
+		} else {
+			dirStream = Files.newDirectoryStream(directory);
+		}
+		List<Path> files = new ArrayList<>();
+		for (Path file : dirStream) {
+			files.add(file);
+		}
+		return files;
+	}
+	
+	/**
+	 * Restituisce la lista di tutti i file (come oggetti Path) in una directory. NB: per file si intende anche una sottodirectory.
+	 * @param directory la directory in cui cercare
+	 * @return
+	 * @throws IOException 
+	 */
+	public static List<Path> listFiles(Path directory) throws IOException {
+		
+		return listFilesByExt(directory, null);
 	}
 }
