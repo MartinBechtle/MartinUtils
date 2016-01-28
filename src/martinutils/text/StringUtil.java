@@ -17,7 +17,7 @@ public class StringUtil
 	 * @param text 
 	 * @return
 	 */
-	public String[] splitLines(String text) {
+	public static String[] splitLines(String text) {
 		Assert.notNull(text, "text");
 		
 		// Transform all newlines in carriage return + newline, then remove all duplicates.
