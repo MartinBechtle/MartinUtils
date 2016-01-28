@@ -1,6 +1,5 @@
 package martinutils.swing;
 
-import java.io.IOException;
 
 /**
  * An output stream linked to a Swing {@link ConsoleFrame} error text area
@@ -13,9 +12,8 @@ public class TextAreaErrorStream extends TextAreaOutputStream {
 	}
 	
 	@Override
-	public void write(int b) throws IOException {
-		char c = (char)b;
-		console.appendError( Character.toString(c) );
+	protected void appendString(String str) {
+		console.appendError(str);
 	}
 	
 }
