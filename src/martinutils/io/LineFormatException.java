@@ -1,6 +1,8 @@
 package martinutils.io;
 
-public class LineFormatException extends Exception
+import java.io.IOException;
+
+public class LineFormatException extends IOException
 {
 	private static final long serialVersionUID = 1L;
 
