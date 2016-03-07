@@ -74,6 +74,25 @@ public class StringSplitter {
 	}
 	
 	/**
+	 * Split the string keeping all separators at the end of each substring
+	 * @param str
+	 * @return
+	 */
+	public String[] splitWithSeparatorsEnding(String str) {
+		
+		String[] splitted = split(str);
+		int len = splitted.length;
+		for (int i = 0; i < len; i++) {
+			
+			if (separators.length <= i) {
+				break;
+			}
+			splitted[i] = splitted[i] + separators[i];
+		}
+		return splitted;
+	}
+	
+	/**
 	 * Get all separators from the last split action
 	 * @return
 	 */

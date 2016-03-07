@@ -77,5 +77,31 @@ public class StringSplitterTest {
 				"pellagra", ")", "", " ", "or", " ", "other", " ", "disorders", " ", "", "(", "", "{", "100153", "}", ")", "."};
 		assertArrayEquals(expected, result);
 	}
+	
+	@Test
+	public void testSplitWithSeparatorsEnding() {
+		
+		StringSplitter splitter = new StringSplitter("<Br ?/>");
+		
+		String str = "These are two<Br/>sentences";
+		String[] result = splitter.splitWithSeparatorsEnding(str);
+		String[] expected = new String[] { "These are two<Br/>", "sentences" };
+		assertArrayEquals(expected, result);
+		
+		str = "These are two<Br />sentences<Br/>";
+		result = splitter.splitWithSeparatorsEnding(str);
+		expected = new String[] { "These are two<Br />", "sentences<Br/>" };
+		assertArrayEquals(expected, result);
+		
+		str = "These are two<Br />sentences<Br/><Br/>";
+		result = splitter.splitWithSeparatorsEnding(str);
+		expected = new String[] { "These are two<Br />", "sentences<Br/>" };
+		assertArrayEquals(expected, result);
+		
+		str = "<Br />These are two sentences<Br/>";
+		result = splitter.splitWithSeparatorsEnding(str);
+		expected = new String[] { "<Br />", "These are two sentences<Br/>" };
+		assertArrayEquals(expected, result);
+	}
 
 }

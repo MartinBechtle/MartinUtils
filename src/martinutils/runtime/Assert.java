@@ -1,5 +1,7 @@
 package martinutils.runtime;
 
+import java.util.Collection;
+
 public class Assert {
 
 	/**
@@ -23,5 +25,13 @@ public class Assert {
 	 */
 	public static void notEmpty(String str) {
 		if (str == null || str.isEmpty()) throw new IllegalArgumentException();
+	}
+	
+	/**
+	 * Throws an IllegalArgumentException if the argument is empty or null
+	 * @param c
+	 */
+	public static void notEmpty(Collection<?> c) {
+		if (c == null || c.isEmpty()) throw new IllegalArgumentException();
 	}
 }
