@@ -225,7 +225,7 @@ public class FileUtil
 	/**
 	 * Restituisce l'estensione di un file
 	 * @param fileName il nome del file
-	 * @return stringa vuota se non ha alcuna estensione
+	 * @return stringa vuota se non ha alcuna estensione, altrimenti l'estensione senza il punto
 	 */
 	public static String getFileExt(String fileName)
 	{
