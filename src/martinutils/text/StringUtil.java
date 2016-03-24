@@ -11,6 +11,7 @@ import martinutils.runtime.Assert;
 
 public class StringUtil
 {
+	public static final String NBSP = new Character((char)160).toString();
 	
 	/**
 	 * Takes in input a single text string which is a compund of different lines separated by /n or /r/n and returns an array of lines
