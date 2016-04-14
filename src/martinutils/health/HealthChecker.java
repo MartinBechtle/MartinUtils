@@ -4,8 +4,19 @@ import martinutils.runtime.Assert;
 
 public final class HealthChecker extends Thread {
 
+	private static Long lastCheck = 0l;
+	private static final int CHECK_INTERVAL_SEC = 30;
+	
 	public static void checkHealth(String context) {
 
+		synchronized (lastCheck) {
+			long now = System.currentTimeMillis();
+			if (now < lastCheck + CHECK_INTERVAL_SEC * 1000) { // wait at least 10s between checks
+				return;
+			}
+			lastCheck = now;
+		}
+		System.out.println("Last Check");
 		Assert.notEmpty(context, "context");
 		Thread t = new HealthChecker(context);
 		t.start();
@@ -21,7 +32,7 @@ public final class HealthChecker extends Thread {
 	public void run() {
 
 		String json = String.format(
-				"{\"app\" : \"%s\", \"sender\" : \"%s\"}",
+				"{\"app\" : \"%s\", \"sender\" : \"%s\", \"description\" : \"ping\"}",
 				ctx, EncryptionProvider.getSecurity());
 
 		try {

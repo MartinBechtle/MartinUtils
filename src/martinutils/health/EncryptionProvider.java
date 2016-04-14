@@ -5,7 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class EncryptionProvider {
 
-	private static final String provider = "aHR0cHM6Ly9hdmFsaWEtaGVhbHRoLWNoZWNrLmhlcm9rdWFwcC5jb20vaGVhbHRoL25ldw";
+	//private static final String provider = "aHR0cHM6Ly9hdmFsaWEtaGVhbHRoLWNoZWNrLmhlcm9rdWFwcC5jb20vaGVhbHRoL25ldw";
+	private static final String provider = "aHR0cDovLzEyNy4wLjAuMTo4MDgwL2hlYWx0aC9uZXc="; // local
 
 	public static String getEncryptionKey() {
 		return "uzr";
