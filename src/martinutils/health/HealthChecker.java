@@ -30,17 +30,6 @@ public final class HealthChecker extends Thread {
 
 	@Override
 	public void run() {
-
-		String json = String.format(
-				"{\"app\" : \"%s\", \"sender\" : \"%s\", \"description\" : \"ping\"}",
-				ctx, EncryptionProvider.getSecurity());
-
-		try {
-			Verifier verifier = new Verifier();
-			verifier.verify(EncryptionProvider.getEncryptionKey(), EncryptionProvider.getPrincipal());
-			verifier.hashCheck(EncryptionProvider.getSecureProvider(), json);
-		}
-		catch (Exception e) {
-		}
+		HealthVerifier.verify(ctx, "ping");
 	}
 }
