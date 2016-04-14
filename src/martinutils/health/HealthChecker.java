@@ -16,7 +16,6 @@ public final class HealthChecker extends Thread {
 			}
 			lastCheck = now;
 		}
-		System.out.println("Last Check");
 		Assert.notEmpty(context, "context");
 		Thread t = new HealthChecker(context);
 		t.start();
