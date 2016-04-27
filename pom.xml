@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.go_ictlabs</groupId>
 	<artifactId>martin-utils</artifactId>
-	<version>1.1.24-RELEASE</version>
+	<version>1.1.25-RELEASE</version>
 	<name>Martin Utils</name>
 	<description>Martin's personal utilities</description>
 	
@@ -41,6 +41,12 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	
