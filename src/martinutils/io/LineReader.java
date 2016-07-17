@@ -103,6 +103,10 @@ public class LineReader implements Iterable<String[]>
 		{
 			String[] cols = line.split(colSeparatorRegex);
 			int colsLen = cols.length;
+			if (line.matches("^.+" + colSeparatorRegex + "$")) { // if line ends with col separator, add a column
+				cols = Arrays.copyOf(cols, ++colsLen);
+				cols[colsLen - 1] = "";
+			}
 			if (constraints != null && !constraints.contains(cols.length))
 				throw new LineFormatException(lineNum, fileName, colsLen);
 			
