@@ -233,6 +233,13 @@ public class XmlUtility
 		return (NodeList) XmlUtility.xpath.evaluate(query, doc, XPathConstants.NODESET);
 	}
 	
+	public static NodeList doXPathQuery(String query, Node node) throws XPathExpressionException
+	{
+		if (XmlUtility.xpath == null)
+			XmlUtility.xpath = XPathFactory.newInstance().newXPath();
+		return (NodeList) XmlUtility.xpath.evaluate(query, node, XPathConstants.NODESET);
+	}
+	
 	public static MartinNodeList doMartinXPathQuery(String query, Document doc) throws XPathExpressionException
 	{
 		if (XmlUtility.xpath == null)

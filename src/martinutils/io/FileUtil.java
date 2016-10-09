@@ -171,6 +171,28 @@ public class FileUtil
 	}
 	
 	/**
+	 * Returns true only if the file is present and can be freely accessed.
+	 * @param file
+	 * @return
+	 */
+	public static boolean isUsableFile(File file) {
+		
+		if(file == null || !file.exists() || !file.canRead() || !file.canWrite()) return false;
+		
+		return true;
+	}
+	
+	/**
+	 * Returns true only if the file is present, can be freely accessed, and is a directory.
+	 * @param file
+	 * @return
+	 */
+	public static boolean isUsableDir(File dir) {
+		
+		return isUsableFile(dir) && dir.isDirectory();
+	}
+	
+	/**
 	 * Restituisce il nome di un file senza l'estensione
 	 * @param file
 	 * @return
