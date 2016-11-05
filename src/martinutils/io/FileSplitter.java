@@ -77,32 +77,37 @@ public class FileSplitter
 	@SuppressWarnings("resource")
 	public void split(File file) throws IOException
 	{
-		BufferedReader reader = FileUtil.getUTF8Reader(file);
+		BufferedWriter writer = null;
+		try (BufferedReader reader = FileUtil.getUTF8Reader(file)) {
 		
-		String fileName = file.getName();
-		int pos = fileName.lastIndexOf('.');
-		fileExt = fileName.substring(pos);
-		fileNameNoExt = fileName.substring(0, pos);
-		fileRootDir = file.getParent();
-		
-		BufferedWriter writer = getNewWriter(null);
-		
-		int bytes = 0;
-		String line = null;
-		while ((line = reader.readLine()) != null)
-		{
-			int len = line.length();
-			bytes += len;
-			writer.append(line);
-			writer.append("\n");
+			String fileName = file.getName();
+			int pos = fileName.lastIndexOf('.');
+			fileExt = fileName.substring(pos);
+			fileNameNoExt = fileName.substring(0, pos);
+			fileRootDir = file.getParent();
 			
-			if (bytes > splitSize) {
-				writer = getNewWriter(writer); // qui ci sarebbe un resource leak se dentro il metodo il vecchio writer non venisse chiuso
-				bytes = 0;
+			writer = getNewWriter(null);
+			
+			int bytes = 0;
+			String line = null;
+			while ((line = reader.readLine()) != null)
+			{
+				int len = line.length();
+				bytes += len;
+				writer.append(line);
+				writer.append("\n");
+				
+				if (bytes > splitSize) {
+					writer = getNewWriter(writer); // il metodo chiude il vecchio writer prima di crearne uno nuovo
+					bytes = 0;
+				}
 			}
+			writer.close();
 		}
-		
-		writer.close();
+		finally {
+			// just in case
+			try { if (writer != null) writer.close(); } catch (IOException e) { }
+		}
 	}
 	
 	private int splitSize;
