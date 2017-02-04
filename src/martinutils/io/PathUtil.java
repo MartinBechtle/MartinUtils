@@ -233,7 +233,7 @@ public class PathUtil
 	public static List<Path> listFilesByExt(Path directory, String ext) throws IOException {
 		
 		DirectoryStream<Path> dirStream;
-		if (StringUtils.isEmpty(ext)) {
+		if (!StringUtils.isEmpty(ext)) {
 			dirStream = Files.newDirectoryStream(directory, new PathUtil.PathFilterByExtension(ext));
 		} else {
 			dirStream = Files.newDirectoryStream(directory);
